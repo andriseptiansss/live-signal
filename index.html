@@ -52,6 +52,16 @@
   .row .v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .row .v.sl { color: #ff7b72; } .row .v.tp { color: #56d364; }
   .row .v.roi-up { color: #56d364; } .row .v.roi-down { color: #f85149; }
+  .lev-panel { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+  .lev-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .lev-controls { display: flex; align-items: center; gap: 10px; }
+  .lev-controls input[type=range] { flex: 1; accent-color: #58a6ff; }
+  .lev-controls input[type=number] { width: 64px; background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 6px; padding: 5px 6px; font-size: 13px; }
+  .lev-x { font-weight: 700; color: #58a6ff; min-width: 44px; text-align: right; }
+  .lev-presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .lev-presets button { background: #0d1117; color: #e6edf3; border: 1px solid #30363d; border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+  .lev-presets button.on { background: #58a6ff; border-color: #58a6ff; color: #0d1117; font-weight: 700; }
+  .lev-note { font-size: 11px; color: #8b949e; margin-top: 8px; }
   .note { font-size: 13px; color: #c9d1d9; margin-top: 10px; line-height: 1.5; }
   .note b { color: #e6edf3; }
   footer { margin-top: 22px; font-size: 12px; color: #8b949e; line-height: 1.6; }
@@ -107,6 +117,16 @@
   <div class="stats" id="stats"></div>
 
   <h2 class="sec">Daftar Sinyal <span class="meta" style="font-weight:400">— terbaru di atas</span></h2>
+  <div class="lev-panel">
+    <div class="lev-title">Simulasi Leverage</div>
+    <div class="lev-controls">
+      <input type="range" id="levRange" min="10" max="150" step="1" value="100" aria-label="Leverage">
+      <input type="number" id="levNum" min="10" max="150" value="100" aria-label="Leverage (x)">
+      <span class="lev-x" id="levX">100×</span>
+    </div>
+    <div class="lev-presets" id="levPresets"></div>
+    <div class="lev-note">ROI sinyal yang sedang berjalan mengikuti leverage ini. Hanya tampilan di perangkatmu — tidak mengubah data sinyal.</div>
+  </div>
   <div id="signals"></div>
 
   <footer>
@@ -171,16 +191,49 @@ function renderStats() {
     '<div class="stat"><div class="k">' + k + '</div><div class="v ' + c + '">' + v + '</div></div>').join('');
 }
 
+// Leverage simulasi ROI — sama seperti ruang Live Signal (10–150x, default 100x).
+// Disimpan per perangkat (localStorage); hanya mengubah tampilan, bukan data sinyal.
+let lev = 100;
+try {
+  const saved = localStorage.getItem('live-signal-lev');
+  if (saved) lev = Math.min(150, Math.max(10, parseInt(saved, 10) || 100));
+} catch (e) {}
+
 function roiPct(s) {
-  // ROI berjalan untuk sinyal BERJALAN, leverage 100x (tetap — website read-only,
-  // leverage bisa diatur hanya di ruang Live Signal).
   if (s.status !== 'BERJALAN') return null;
   const last = (s.pair === pair && ticker) ? ticker.last
     : (data.prices && data.prices[s.pair] ? data.prices[s.pair].last : null);
   if (!last || !s.entry) return null;
   const move = s.direction === 'SHORT' ? (s.entry - last) / s.entry : (last - s.entry) / s.entry;
-  return move * 100 * 100;
+  return move * 100 * lev;
 }
+
+const LEV_PRESETS = [10, 20, 25, 50, 75, 100, 125, 150];
+function setLev(v) {
+  lev = Math.min(150, Math.max(10, Math.round(v) || 100));
+  try { localStorage.setItem('live-signal-lev', String(lev)); } catch (e) {}
+  const r = document.getElementById('levRange'); if (r) r.value = lev;
+  const n = document.getElementById('levNum'); if (n) n.value = lev;
+  const x = document.getElementById('levX'); if (x) x.textContent = lev + '×';
+  document.querySelectorAll('#levPresets button').forEach(b => b.classList.toggle('on', parseInt(b.dataset.lev, 10) === lev));
+  if (data) renderSignals();
+}
+(function initLev() {
+  const wrap = document.getElementById('levPresets');
+  if (wrap) {
+    LEV_PRESETS.forEach(v => {
+      const b = document.createElement('button');
+      b.textContent = v + '×'; b.dataset.lev = v;
+      b.addEventListener('click', () => setLev(v));
+      wrap.appendChild(b);
+    });
+  }
+  const r = document.getElementById('levRange');
+  if (r) r.addEventListener('input', () => setLev(parseInt(r.value, 10)));
+  const n = document.getElementById('levNum');
+  if (n) n.addEventListener('change', () => setLev(parseInt(n.value, 10)));
+  setLev(lev);
+})();
 
 function renderSignals() {
   const list = (data.signals || []);
@@ -200,7 +253,7 @@ function renderSignals() {
       '<div class="row"><div class="k">Risk</div><div class="v">' + fmt(s.risk_pct, 2) + '%</div></div>' +
       '<div class="row"><div class="k">Reward</div><div class="v">' + fmt(s.reward_pct, 2) + '%</div></div>' +
       '<div class="row"><div class="k">Rasio</div><div class="v">1 : ' + String(s.ratio || '').replace('1:', '') + '</div></div>' +
-      (r === null ? '' : '<div class="row"><div class="k">ROI (100x)</div><div class="v ' + (r >= 0 ? 'roi-up' : 'roi-down') + '">' + (r >= 0 ? '+' : '') + fmt(r, 2) + '%</div></div>') +
+      (r === null ? '' : '<div class="row"><div class="k">ROI (' + lev + 'x)</div><div class="v ' + (r >= 0 ? 'roi-up' : 'roi-down') + '">' + (r >= 0 ? '+' : '') + fmt(r, 2) + '%</div></div>') +
       '</div>' +
       (s.note ? '<p class="note"><b>Penyebab / catatan:</b> ' + escapeHtml(s.note) + '</p>' : '') +
       '</div>';
