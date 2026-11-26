@@ -115,6 +115,7 @@ def parse_tracker(text):
         if len(cells) < 9:
             continue
         _num, name, entry_c, sl_c, tp_c, risk_c, reward_c, ratio_c, status, note = cells[:10]
+        created = cells[10].strip() if len(cells) > 10 else ""
         m = re.match(r"(BTC|ETH|BNB|SOL)\s+(Short|Long)", name, re.IGNORECASE)
         if not m:
             continue
@@ -147,6 +148,7 @@ def parse_tracker(text):
             "ratio": ratio,
             "status": status.strip(),
             "note": note.strip(),
+            "created": created,
         })
     if not signals:
         raise ValueError("tidak ada sinyal ter-parse dari tracker")
