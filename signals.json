@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-26 20:21 WIB",
+  "generated_at_wib": "2026-11-26 20:30 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -8,11 +8,11 @@
     "SOLUSDT.P"
   ],
   "stats": {
-    "total": 5,
+    "total": 6,
     "hit_tp": 1,
     "hit_sl": 1,
     "invalid": 2,
-    "running": 1,
+    "running": 2,
     "waiting": 0,
     "winrate": 50.0
   },
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 60854.2,
-      "change_24h_pct": 3.64,
+      "last": 60827.9,
+      "change_24h_pct": 3.97,
       "high_24h": 61620.0,
       "low_24h": 57257.8
     },
     "ETHUSDT.P": {
-      "last": 1706.61,
-      "change_24h_pct": 3.68,
+      "last": 1704.69,
+      "change_24h_pct": 4.02,
       "high_24h": 1729.68,
       "low_24h": 1607.68
     },
     "BNBUSDT.P": {
-      "last": 552.99,
-      "change_24h_pct": 2.55,
+      "last": 552.2,
+      "change_24h_pct": 2.76,
       "high_24h": 562.74,
       "low_24h": 526.04
     },
     "SOLUSDT.P": {
-      "last": 70.99,
-      "change_24h_pct": 4.89,
+      "last": 70.92,
+      "change_24h_pct": 5.14,
       "high_24h": 71.9,
       "low_24h": 65.78
     }
@@ -63,6 +63,29 @@
   "signals": [
     {
       "id": 1,
+      "pair": "ETHUSDT.P",
+      "okx": "ETH-USDT-SWAP",
+      "decimals": 2,
+      "name": "ETH Short B",
+      "direction": "SHORT",
+      "entry": 1711.9,
+      "entry_zone": [
+        1711.4,
+        1729.41
+      ],
+      "sl": 1729.41,
+      "tp_zone": [
+        1681.35,
+        1685.02
+      ],
+      "risk_pct": 1.02,
+      "reward_pct": 1.57,
+      "ratio": "1:1,5",
+      "status": "BERJALAN",
+      "note": ""
+    },
+    {
+      "id": 2,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
@@ -85,7 +108,7 @@
       "note": ""
     },
     {
-      "id": 2,
+      "id": 3,
       "pair": "ETHUSDT.P",
       "okx": "ETH-USDT-SWAP",
       "decimals": 2,
@@ -108,7 +131,7 @@
       "note": "Kadaluarsa 07:00 WIB 25 Nov 2026 — tidak teruji sebelum pergantian candle harian; level Asia 24 Nov sudah tidak berlaku. Bukan HIT SL, tidak dihitung di winrate. High tertinggi jendela 00:05–07:00 WIB 25 Nov: 1.688,75 (candle 5m/15m 01:00), 31,25 di bawah zona"
     },
     {
-      "id": 3,
+      "id": 4,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
@@ -131,7 +154,7 @@
       "note": "Kadaluarsa 07:00 WIB 25 Nov 2026 — tidak teruji sebelum pergantian candle harian; level Asia 24 Nov sudah tidak berlaku. Bukan HIT SL, tidak dihitung di winrate. High tertinggi jendela 00:05–07:00 WIB 25 Nov: 60.267,0 (candle 5m/15m 01:00), 1.233,0 di bawah zona"
     },
     {
-      "id": 4,
+      "id": 5,
       "pair": "ETHUSDT.P",
       "okx": "ETH-USDT-SWAP",
       "decimals": 2,
@@ -154,7 +177,7 @@
       "note": "HIT SL 22:15 WIB — sweep likuiditas di bawah demand Asia Low 1.667,04 (low 1.666,07, hanya 0,93 di bawah SL, lalu memantul); SL tepat di bawah level yang jelas sehingga mudah disapu; BTC jebol 60.000 ikut menyeret ETH; sesi larut likuiditas tipis. Pelajaran: beri buffer SL di bawah sweep low / tunggu sweep dulu baru entry; demand yang juga Asia Low itu rapuh; cek korelasi BTC sebelum long ETH."
     },
     {
-      "id": 5,
+      "id": 6,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
