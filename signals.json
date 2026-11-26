@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-26 18:50 WIB",
+  "generated_at_wib": "2026-11-26 18:56 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 60705.1,
+      "last": 60672.9,
       "change_24h_pct": 3.32,
       "high_24h": 61620.0,
       "low_24h": 57257.8
     },
     "ETHUSDT.P": {
-      "last": 1700.33,
-      "change_24h_pct": 3.37,
+      "last": 1699.15,
+      "change_24h_pct": 3.41,
       "high_24h": 1729.68,
       "low_24h": 1607.68
     },
     "BNBUSDT.P": {
-      "last": 552.1,
-      "change_24h_pct": 2.2,
+      "last": 551.77,
+      "change_24h_pct": 2.28,
       "high_24h": 562.74,
       "low_24h": 526.04
     },
     "SOLUSDT.P": {
-      "last": 70.8,
-      "change_24h_pct": 4.44,
+      "last": 70.79,
+      "change_24h_pct": 4.73,
       "high_24h": 71.9,
       "low_24h": 65.78
     }
@@ -82,7 +82,7 @@
       "reward_pct": 1.84,
       "ratio": "1:2,3",
       "status": "BERJALAN",
-      "note": "Entry teruji 11:40 WIB: retest supply 07:15 (61.106,9–61.603,3), candle 5m 11:40 H 61.121,7 / C 60.988,0 — rejection bersih + follow-through 3 candle 5m di bawah zona (C 60.977,9 / 60.950,1 / 60.950,8). Diterbitkan 12:35 WIB (aturan eksekusi langsung). Harga saat diterbitkan ~60.990. Dashboard Live Signal diperbaiki ~16:39 WIB: kini tampil BERJALAN (masuk 61.119,8 pada 11:40 WIB, Risk 0,79% / Rasio 1:2,3), sama dengan tracker dan website. Support pertama demand 11:00 (60.742,0–60.894,0); invalidasi: close 5m/15m di atas 61.603,3."
+      "note": ""
     },
     {
       "id": 2,
@@ -151,7 +151,7 @@
       "reward_pct": 2.7,
       "ratio": "1:5,7",
       "status": "HIT SL",
-      "note": "Kalah — kena 1.666,07, candle 5m 22:15 WIB (0,93 di bawah SL 1.667); harga lalu memantul ke ~1.675,02 (22:20 WIB). TP 1.720,20 tidak kena (high tertinggi 1.707,56, 19:40)"
+      "note": "HIT SL 22:15 WIB — sweep likuiditas di bawah demand Asia Low 1.667,04 (low 1.666,07, hanya 0,93 di bawah SL, lalu memantul); SL tepat di bawah level yang jelas sehingga mudah disapu; BTC jebol 60.000 ikut menyeret ETH; sesi larut likuiditas tipis. Pelajaran: beri buffer SL di bawah sweep low / tunggu sweep dulu baru entry; demand yang juga Asia Low itu rapuh; cek korelasi BTC sebelum long ETH."
     },
     {
       "id": 5,
@@ -174,7 +174,7 @@
       "reward_pct": 1.21,
       "ratio": "1:3,3",
       "status": "HIT TP",
-      "note": "Menang — kena 59.731,9, candle 5m 16:10 WIB"
+      "note": ""
     }
   ]
 }
