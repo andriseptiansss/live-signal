@@ -51,6 +51,7 @@
   .row .k { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: .4px; }
   .row .v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .row .v.sl { color: #ff7b72; } .row .v.tp { color: #56d364; }
+  .row .v.roi-up { color: #56d364; } .row .v.roi-down { color: #f85149; }
   .note { font-size: 13px; color: #c9d1d9; margin-top: 10px; line-height: 1.5; }
   .note b { color: #e6edf3; }
   footer { margin-top: 22px; font-size: 12px; color: #8b949e; line-height: 1.6; }
@@ -170,12 +171,24 @@ function renderStats() {
     '<div class="stat"><div class="k">' + k + '</div><div class="v ' + c + '">' + v + '</div></div>').join('');
 }
 
+function roiPct(s) {
+  // ROI berjalan untuk sinyal BERJALAN, leverage 100x (tetap — website read-only,
+  // leverage bisa diatur hanya di ruang Live Signal).
+  if (s.status !== 'BERJALAN') return null;
+  const last = (s.pair === pair && ticker) ? ticker.last
+    : (data.prices && data.prices[s.pair] ? data.prices[s.pair].last : null);
+  if (!last || !s.entry) return null;
+  const move = s.direction === 'SHORT' ? (s.entry - last) / s.entry : (last - s.entry) / s.entry;
+  return move * 100 * 100;
+}
+
 function renderSignals() {
   const list = (data.signals || []);
   if (!list.length) { $('signals').innerHTML = '<p class="meta">Belum ada sinyal.</p>'; return; }
   $('signals').innerHTML = list.map(s => {
     const dec = s.decimals ?? 2;
     const slLabel = s.direction === 'SHORT' ? 'di atas ' + fmt(s.sl, dec) : 'di bawah ' + fmt(s.sl, dec);
+    const r = roiPct(s);
     return '<div class="card">' +
       '<div class="card-head"><span class="name">' + s.name + '</span>' +
       '<span class="badge ' + s.direction + '">' + s.direction + '</span>' +
@@ -187,6 +200,7 @@ function renderSignals() {
       '<div class="row"><div class="k">Risk</div><div class="v">' + fmt(s.risk_pct, 2) + '%</div></div>' +
       '<div class="row"><div class="k">Reward</div><div class="v">' + fmt(s.reward_pct, 2) + '%</div></div>' +
       '<div class="row"><div class="k">Rasio</div><div class="v">1 : ' + String(s.ratio || '').replace('1:', '') + '</div></div>' +
+      (r === null ? '' : '<div class="row"><div class="k">ROI (100x)</div><div class="v ' + (r >= 0 ? 'roi-up' : 'roi-down') + '">' + (r >= 0 ? '+' : '') + fmt(r, 2) + '%</div></div>') +
       '</div>' +
       (s.note ? '<p class="note"><b>Penyebab / catatan:</b> ' + escapeHtml(s.note) + '</p>' : '') +
       '</div>';
@@ -215,6 +229,7 @@ async function fetchTicker() {
     } catch (e2) { ticker = null; priceSource = '—'; }
   }
   renderPairMeta();
+  if (data) renderSignals();
   drawChart();
 }
 
