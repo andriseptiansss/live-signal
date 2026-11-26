@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 60813.6,
-      "change_24h_pct": 4.79,
+      "last": 60807.6,
+      "change_24h_pct": 4.56,
       "high_24h": 61620.0,
       "low_24h": 57257.8
     },
     "ETHUSDT.P": {
-      "last": 1702.1,
-      "change_24h_pct": 4.42,
+      "last": 1701.8,
+      "change_24h_pct": 4.15,
       "high_24h": 1729.68,
       "low_24h": 1607.68
     },
     "BNBUSDT.P": {
-      "last": 552.6,
-      "change_24h_pct": 3.56,
+      "last": 552.52,
+      "change_24h_pct": 3.54,
       "high_24h": 562.74,
       "low_24h": 526.04
     },
     "SOLUSDT.P": {
-      "last": 71.13,
-      "change_24h_pct": 6.26,
+      "last": 71.09,
+      "change_24h_pct": 6.2,
       "high_24h": 71.9,
       "low_24h": 65.78
     }
@@ -66,7 +66,7 @@
       "pair": "ETHUSDT.P",
       "okx": "ETH-USDT-SWAP",
       "decimals": 2,
-      "name": "ETH Short B",
+      "name": "ETH Short",
       "direction": "SHORT",
       "entry": 1711.9,
       "entry_zone": [
@@ -82,14 +82,15 @@
       "reward_pct": 1.57,
       "ratio": "1:1,5",
       "status": "BERJALAN",
-      "note": ""
+      "note": "",
+      "created": "26 Nov 2026, 20:25 WIB"
     },
     {
       "id": 2,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
-      "name": "BTC Short C",
+      "name": "BTC Short",
       "direction": "SHORT",
       "entry": 61121.7,
       "entry_zone": [
@@ -105,7 +106,8 @@
       "reward_pct": 1.84,
       "ratio": "1:2,3",
       "status": "BERJALAN",
-      "note": ""
+      "note": "",
+      "created": "26 Nov 2026, 12:35 WIB"
     },
     {
       "id": 3,
@@ -128,7 +130,8 @@
       "reward_pct": 3.04,
       "ratio": "1:7,0",
       "status": "TIDAK VALID",
-      "note": "Kadaluarsa 07:00 WIB 25 Nov 2026 — tidak teruji sebelum pergantian candle harian; level Asia 24 Nov sudah tidak berlaku. Bukan HIT SL, tidak dihitung di winrate. High tertinggi jendela 00:05–07:00 WIB 25 Nov: 1.688,75 (candle 5m/15m 01:00), 31,25 di bawah zona"
+      "note": "Kadaluarsa 07:00 WIB 25 Nov 2026 — tidak teruji sebelum pergantian candle harian; level Asia 24 Nov sudah tidak berlaku. Bukan HIT SL, tidak dihitung di winrate. High tertinggi jendela 00:05–07:00 WIB 25 Nov: 1.688,75 (candle 5m/15m 01:00), 31,25 di bawah zona",
+      "created": "24 Nov 2026, 16:55 WIB"
     },
     {
       "id": 4,
@@ -151,7 +154,8 @@
       "reward_pct": 1.5,
       "ratio": "1:7,4",
       "status": "TIDAK VALID",
-      "note": "Kadaluarsa 07:00 WIB 25 Nov 2026 — tidak teruji sebelum pergantian candle harian; level Asia 24 Nov sudah tidak berlaku. Bukan HIT SL, tidak dihitung di winrate. High tertinggi jendela 00:05–07:00 WIB 25 Nov: 60.267,0 (candle 5m/15m 01:00), 1.233,0 di bawah zona"
+      "note": "Kadaluarsa 07:00 WIB 25 Nov 2026 — tidak teruji sebelum pergantian candle harian; level Asia 24 Nov sudah tidak berlaku. Bukan HIT SL, tidak dihitung di winrate. High tertinggi jendela 00:05–07:00 WIB 25 Nov: 60.267,0 (candle 5m/15m 01:00), 1.233,0 di bawah zona",
+      "created": "24 Nov 2026, 16:55 WIB"
     },
     {
       "id": 5,
@@ -174,7 +178,8 @@
       "reward_pct": 2.7,
       "ratio": "1:5,7",
       "status": "HIT SL",
-      "note": "HIT SL 22:15 WIB — sweep likuiditas di bawah demand Asia Low 1.667,04 (low 1.666,07, hanya 0,93 di bawah SL, lalu memantul); SL tepat di bawah level yang jelas sehingga mudah disapu; BTC jebol 60.000 ikut menyeret ETH; sesi larut likuiditas tipis. Pelajaran: beri buffer SL di bawah sweep low / tunggu sweep dulu baru entry; demand yang juga Asia Low itu rapuh; cek korelasi BTC sebelum long ETH."
+      "note": "HIT SL 22:15 WIB — sweep likuiditas di bawah demand Asia Low 1.667,04 (low 1.666,07, hanya 0,93 di bawah SL, lalu memantul); SL tepat di bawah level yang jelas sehingga mudah disapu; BTC jebol 60.000 ikut menyeret ETH; sesi larut likuiditas tipis. Pelajaran: beri buffer SL di bawah sweep low / tunggu sweep dulu baru entry; demand yang juga Asia Low itu rapuh; cek korelasi BTC sebelum long ETH.",
+      "created": "24 Nov 2026, 16:55 WIB"
     },
     {
       "id": 6,
@@ -197,7 +202,8 @@
       "reward_pct": 1.21,
       "ratio": "1:3,3",
       "status": "HIT TP",
-      "note": ""
+      "note": "",
+      "created": "24 Nov 2026, 16:55 WIB"
     }
   ]
 }
