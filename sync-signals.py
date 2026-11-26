@@ -81,21 +81,26 @@ def parse_tp(text):
 
 def parse_entry(text, note):
     """Entry cell + kolom Hasil -> (entry_price, zone_low, zone_high).
-    - '61.121,7 (test 11:40)' + note '(61.106,9–61.603,3)' -> (61121.7, 61106.9, 61603.3)
+    - '61.121,7 (zona 61.106,9–61.603,3)' -> (61121.7, 61106.9, 61603.3)
     - '61.500–61.650' -> (61500.0, 61500.0, 61650.0)  [entry = tepi terdekat, sesuai tracker]
-    - '60.480,0' -> (60480.0, 60480.0, 60480.0)"""
-    rng = parse_range(text)
-    if rng:
-        return (rng[0], rng[0], rng[1])
+    - '60.480,0' -> (60480.0, 60480.0, 60480.0)
+    Zona dicari dulu di dalam tanda kurung pada Entry atau catatan
+    (aturan catatan baru 26 Nov 2026: catatan hanya untuk TIDAK VALID /
+    HIT SL, jadi zona harus bisa dibaca dari kolom Entry sendiri);
+    kalau tidak ada, pakai range pada Entry; kalau tidak ada juga,
+    zona = harga entry (satu titik)."""
     price = parse_id_number(text)
     if price is None:
         return (None, None, None)
-    # zona dari catatan, mis. "retest supply baru 07:15 (61.106,9–61.603,3)"
-    m = re.search(r"\((\d[\d\.,–\-]*)\)", note or "")
-    if m:
-        z = parse_range(m.group(1))
-        if z:
-            return (price, z[0], z[1])
+    for src in (text, note or ""):
+        m = re.search(r"\((?:[^)]*?)(\d[\d\.,]*[–\-]\d[\d\.,]*)\)", src)
+        if m:
+            z = parse_range(m.group(1))
+            if z:
+                return (price, z[0], z[1])
+    rng = parse_range(text)
+    if rng:
+        return (rng[0], rng[0], rng[1])
     return (price, price, price)
 
 
