@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-26 16:30 WIB",
+  "generated_at_wib": "2026-11-26 16:40 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 60755.2,
-      "change_24h_pct": 3.14,
+      "last": 60887.6,
+      "change_24h_pct": 3.49,
       "high_24h": 61620.0,
       "low_24h": 57257.8
     },
     "ETHUSDT.P": {
-      "last": 1698.48,
-      "change_24h_pct": 3.66,
+      "last": 1703.56,
+      "change_24h_pct": 4.03,
       "high_24h": 1729.68,
       "low_24h": 1607.68
     },
     "BNBUSDT.P": {
-      "last": 553.05,
-      "change_24h_pct": 2.56,
+      "last": 555.17,
+      "change_24h_pct": 3.03,
       "high_24h": 562.74,
       "low_24h": 526.04
     },
     "SOLUSDT.P": {
-      "last": 70.9,
-      "change_24h_pct": 5.05,
+      "last": 71.13,
+      "change_24h_pct": 5.52,
       "high_24h": 71.9,
       "low_24h": 65.78
     }
@@ -82,7 +82,7 @@
       "reward_pct": 1.84,
       "ratio": "1:2,3",
       "status": "BERJALAN",
-      "note": "Entry teruji 11:40 WIB: retest supply 07:15 (61.106,9–61.603,3), candle 5m 11:40 H 61.121,7 / C 60.988,0 — rejection bersih + follow-through 3 candle 5m di bawah zona (C 60.977,9 / 60.950,1 / 60.950,8). Diterbitkan 12:35 WIB (aturan eksekusi langsung). Harga saat diterbitkan ~60.990. CATATAN: di halaman Live Signal sinyal ini tampil MENUNGGU (artefak hanya mendeteksi sentuhan zona setelah sinyal dibuat; zona sudah teruji 11:40 sebelum dibuat) — Risk/Rasio di halaman (0,40% / 1:5,5) dihitung dari tengah zona, sedangkan tracker memakai harga test 61.121,7 (0,79% / 1:2,3). Support pertama demand 11:00 (60.742,0–60.894,0); invalidasi: close 5m/15m di atas 61.603,3."
+      "note": "Entry teruji 11:40 WIB: retest supply 07:15 (61.106,9–61.603,3), candle 5m 11:40 H 61.121,7 / C 60.988,0 — rejection bersih + follow-through 3 candle 5m di bawah zona (C 60.977,9 / 60.950,1 / 60.950,8). Diterbitkan 12:35 WIB (aturan eksekusi langsung). Harga saat diterbitkan ~60.990. Dashboard Live Signal diperbaiki ~16:39 WIB: kini tampil BERJALAN (masuk 61.119,8 pada 11:40 WIB, Risk 0,79% / Rasio 1:2,3), sama dengan tracker dan website. Support pertama demand 11:00 (60.742,0–60.894,0); invalidasi: close 5m/15m di atas 61.603,3."
     },
     {
       "id": 2,
