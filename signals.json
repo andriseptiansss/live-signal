@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-26 21:22 WIB",
+  "generated_at_wib": "2026-11-26 21:30 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -8,12 +8,12 @@
     "SOLUSDT.P"
   ],
   "stats": {
-    "total": 6,
+    "total": 7,
     "hit_tp": 1,
     "hit_sl": 1,
     "invalid": 2,
     "running": 1,
-    "waiting": 1,
+    "waiting": 2,
     "winrate": 50.0
   },
   "pdh_pdl": {
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 60769.9,
-      "change_24h_pct": 4.13,
+      "last": 60744.1,
+      "change_24h_pct": 4.39,
       "high_24h": 61620.0,
       "low_24h": 57257.8
     },
     "ETHUSDT.P": {
-      "last": 1702.0,
-      "change_24h_pct": 3.93,
+      "last": 1701.6,
+      "change_24h_pct": 4.13,
       "high_24h": 1729.68,
       "low_24h": 1607.68
     },
     "BNBUSDT.P": {
-      "last": 552.37,
-      "change_24h_pct": 3.22,
+      "last": 552.29,
+      "change_24h_pct": 3.35,
       "high_24h": 562.74,
       "low_24h": 526.04
     },
     "SOLUSDT.P": {
-      "last": 71.28,
-      "change_24h_pct": 6.32,
+      "last": 71.33,
+      "change_24h_pct": 6.54,
       "high_24h": 71.9,
       "low_24h": 65.78
     }
@@ -63,6 +63,30 @@
   "signals": [
     {
       "id": 1,
+      "pair": "SOLUSDT.P",
+      "okx": "SOL-USDT-SWAP",
+      "decimals": 2,
+      "name": "SOL Short",
+      "direction": "SHORT",
+      "entry": 71.33,
+      "entry_zone": [
+        71.33,
+        71.89
+      ],
+      "sl": 71.89,
+      "tp_zone": [
+        70.42,
+        70.6
+      ],
+      "risk_pct": 0.39,
+      "reward_pct": 1.41,
+      "ratio": "1:3,6",
+      "status": "MENUNGGU",
+      "note": "",
+      "created": "26 Nov 2026, 21:25 WIB"
+    },
+    {
+      "id": 2,
       "pair": "ETHUSDT.P",
       "okx": "ETH-USDT-SWAP",
       "decimals": 2,
@@ -86,7 +110,7 @@
       "created": "26 Nov 2026, 20:25 WIB"
     },
     {
-      "id": 2,
+      "id": 3,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
@@ -110,7 +134,7 @@
       "created": "26 Nov 2026, 12:35 WIB"
     },
     {
-      "id": 3,
+      "id": 4,
       "pair": "ETHUSDT.P",
       "okx": "ETH-USDT-SWAP",
       "decimals": 2,
@@ -134,7 +158,7 @@
       "created": "24 Nov 2026, 16:55 WIB"
     },
     {
-      "id": 4,
+      "id": 5,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
@@ -158,7 +182,7 @@
       "created": "24 Nov 2026, 16:55 WIB"
     },
     {
-      "id": 5,
+      "id": 6,
       "pair": "ETHUSDT.P",
       "okx": "ETH-USDT-SWAP",
       "decimals": 2,
@@ -182,7 +206,7 @@
       "created": "24 Nov 2026, 16:55 WIB"
     },
     {
-      "id": 6,
+      "id": 7,
       "pair": "BTCUSDT.P",
       "okx": "BTC-USDT-SWAP",
       "decimals": 1,
