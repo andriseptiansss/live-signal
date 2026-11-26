@@ -52,6 +52,7 @@
   .row .v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .row .v.sl { color: #ff7b72; } .row .v.tp { color: #56d364; }
   .row .v.roi-up { color: #56d364; } .row .v.roi-down { color: #f85149; }
+  .created { font-size: 11px; color: #8b949e; margin: 2px 0 4px; }
   .lev-panel { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
   .lev-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
   .lev-controls { display: flex; align-items: center; gap: 10px; }
@@ -246,6 +247,7 @@ function renderSignals() {
       '<div class="card-head"><span class="name">' + s.name + '</span>' +
       '<span class="badge ' + s.direction + '">' + s.direction + '</span>' +
       '<span class="badge ' + statusClass(s.status) + '">' + s.status + '</span></div>' +
+      (s.created ? '<div class="created">Dibuat ' + escapeHtml(s.created) + '</div>' : '') +
       '<div class="rows">' +
       '<div class="row"><div class="k">Entry</div><div class="v">' + fmt(s.entry, dec) + '</div></div>' +
       '<div class="row"><div class="k">Stop Loss</div><div class="v sl">' + slLabel + '</div></div>' +
