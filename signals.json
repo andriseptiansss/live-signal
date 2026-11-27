@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-28 00:00 WIB",
+  "generated_at_wib": "2026-11-28 00:10 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -12,8 +12,8 @@
     "hit_tp": 3,
     "hit_sl": 2,
     "invalid": 7,
-    "running": 2,
-    "waiting": 2,
+    "running": 3,
+    "waiting": 1,
     "winrate": 60.0
   },
   "pdh_pdl": {
@@ -36,25 +36,25 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 59917.2,
-      "change_24h_pct": -1.11,
+      "last": 59955.0,
+      "change_24h_pct": -1.05,
       "high_24h": 62199.2,
       "low_24h": 58729.6
     },
     "ETHUSDT.P": {
-      "last": 1668.01,
-      "change_24h_pct": -1.56,
+      "last": 1670.67,
+      "change_24h_pct": -1.4,
       "high_24h": 1754.99,
       "low_24h": 1632.08
     },
     "BNBUSDT.P": {
-      "last": 552.06,
-      "change_24h_pct": -0.0,
+      "last": 552.58,
+      "change_24h_pct": 0.1,
       "high_24h": 568.08,
       "low_24h": 542.51
     },
     "SOLUSDT.P": {
-      "last": 71.95,
+      "last": 71.98,
       "change_24h_pct": 1.22,
       "high_24h": 73.89,
       "low_24h": 70.06
@@ -68,7 +68,7 @@
       "decimals": 2,
       "name": "BNB Long",
       "direction": "LONG",
-      "entry": 548.67,
+      "entry": 552.37,
       "entry_zone": [
         548.67,
         552.61
@@ -78,10 +78,10 @@
         562.48,
         563.62
       ],
-      "risk_pct": 0.36,
-      "reward_pct": 2.15,
-      "ratio": "1:6,0",
-      "status": "MENUNGGU",
+      "risk_pct": 0.67,
+      "reward_pct": 1.83,
+      "ratio": "1:2,7",
+      "status": "BERJALAN",
       "note": "",
       "created": "27 Nov 2026, 23:12 WIB"
     },
