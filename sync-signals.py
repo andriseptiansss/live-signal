@@ -33,6 +33,7 @@ PAIRS = {
     "ETH": {"symbol": "ETHUSDT.P", "okx": "ETH-USDT-SWAP", "decimals": 2},
     "BNB": {"symbol": "BNBUSDT.P", "okx": "BNB-USDT-SWAP", "decimals": 2},
     "SOL": {"symbol": "SOLUSDT.P", "okx": "SOL-USDT-SWAP", "decimals": 2},
+    "XAU": {"symbol": "XAUUSDT.P", "okx": "XAU-USDT-SWAP", "decimals": 1},
 }
 
 WIB = timezone(timedelta(hours=7))
@@ -116,7 +117,7 @@ def parse_tracker(text):
             continue
         _num, name, entry_c, sl_c, tp_c, risk_c, reward_c, ratio_c, status, note = cells[:10]
         created = cells[10].strip() if len(cells) > 10 else ""
-        m = re.match(r"(BTC|ETH|BNB|SOL)\s+(Short|Long)", name, re.IGNORECASE)
+        m = re.match(r"(BTC|ETH|BNB|SOL|XAU)\s+(Short|Long)", name, re.IGNORECASE)
         if not m:
             continue
         base, side = m.group(1).upper(), m.group(2).upper()
@@ -222,7 +223,7 @@ def main():
     out = {
         "generated_at_wib": now_wib,
         "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
-        "pairs": [PAIRS[b]["symbol"] for b in ("BTC", "ETH", "BNB", "SOL")],
+        "pairs": [PAIRS[b]["symbol"] for b in ("BTC", "ETH", "BNB", "SOL", "XAU")],
         "stats": stats,
         "pdh_pdl": pdh_pdl,
         "prices": prices,
