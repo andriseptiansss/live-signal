@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-27 12:00 WIB",
+  "generated_at_wib": "2026-11-27 12:10 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -10,11 +10,11 @@
   "stats": {
     "total": 11,
     "hit_tp": 3,
-    "hit_sl": 1,
+    "hit_sl": 2,
     "invalid": 3,
-    "running": 1,
+    "running": 0,
     "waiting": 3,
-    "winrate": 75.0
+    "winrate": 60.0
   },
   "pdh_pdl": {
     "BTCUSDT.P": {
@@ -36,27 +36,27 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 61430.5,
-      "change_24h_pct": 0.73,
+      "last": 61701.0,
+      "change_24h_pct": 1.28,
       "high_24h": 61879.7,
       "low_24h": 59886.8
     },
     "ETHUSDT.P": {
-      "last": 1733.7,
-      "change_24h_pct": 1.83,
-      "high_24h": 1741.31,
+      "last": 1744.54,
+      "change_24h_pct": 2.62,
+      "high_24h": 1746.65,
       "low_24h": 1666.71
     },
     "BNBUSDT.P": {
-      "last": 563.51,
-      "change_24h_pct": 0.57,
-      "high_24h": 565.17,
+      "last": 566.17,
+      "change_24h_pct": 1.11,
+      "high_24h": 566.67,
       "low_24h": 544.26
     },
     "SOLUSDT.P": {
-      "last": 72.73,
-      "change_24h_pct": 2.18,
-      "high_24h": 73.18,
+      "last": 73.16,
+      "change_24h_pct": 2.81,
+      "high_24h": 73.22,
       "low_24h": 69.74
     }
   },
@@ -81,8 +81,8 @@
       "risk_pct": 0.26,
       "reward_pct": 1.99,
       "ratio": "1:7,6",
-      "status": "BERJALAN",
-      "note": "",
+      "status": "HIT SL",
+      "note": "HIT SL 12:05 WIB — high candle 5m 12:05 WIB 73,22, menyentuh zona SL di atas 73,19 (entry test 73,00, 11:35 WIB). Alasan + pelajaran menyusul di cek per jam.",
       "created": "27 Nov 2026, 11:29 WIB"
     },
     {
