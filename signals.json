@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-27 13:10 WIB",
+  "generated_at_wib": "2026-11-27 13:20 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -11,9 +11,9 @@
     "total": 11,
     "hit_tp": 3,
     "hit_sl": 2,
-    "invalid": 5,
+    "invalid": 6,
     "running": 0,
-    "waiting": 1,
+    "waiting": 0,
     "winrate": 60.0
   },
   "pdh_pdl": {
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 61832.6,
-      "change_24h_pct": 2.23,
-      "high_24h": 61958.4,
+      "last": 61878.9,
+      "change_24h_pct": 2.3,
+      "high_24h": 62027.8,
       "low_24h": 59886.8
     },
     "ETHUSDT.P": {
-      "last": 1741.23,
-      "change_24h_pct": 3.45,
+      "last": 1739.66,
+      "change_24h_pct": 3.15,
       "high_24h": 1754.99,
       "low_24h": 1666.71
     },
     "BNBUSDT.P": {
-      "last": 567.17,
-      "change_24h_pct": 2.07,
+      "last": 567.27,
+      "change_24h_pct": 2.1,
       "high_24h": 567.94,
       "low_24h": 544.26
     },
     "SOLUSDT.P": {
-      "last": 73.13,
-      "change_24h_pct": 3.45,
+      "last": 73.18,
+      "change_24h_pct": 3.41,
       "high_24h": 73.54,
       "low_24h": 69.74
     }
@@ -153,8 +153,8 @@
       "risk_pct": 0.41,
       "reward_pct": 1.32,
       "ratio": "1:3,2",
-      "status": "MENUNGGU",
-      "note": "",
+      "status": "TIDAK VALID",
+      "note": "TIDAK VALID 13:15 WIB — zona supply 61.356,3–61.858,6 ditembus ke atas: close 5m 13:10 WIB 61.893,6 (OKX; TradingView interim 61.929,0) dan close 15m 13:00 WIB 61.893,6 (TradingView interim 61.926,3) — keduanya di atas atap zona 61.858,6; tidak ada rejection 5m (tidak satu pun close di bawah 61.356,3). Bukan HIT SL, tidak dihitung winrate.",
       "created": "27 Nov 2026, 11:29 WIB"
     },
     {
