@@ -249,7 +249,8 @@ function renderSignals() {
       '<span class="badge ' + statusClass(s.status) + '">' + s.status + '</span></div>' +
       (s.created ? '<div class="created">Dibuat ' + escapeHtml(s.created) + '</div>' : '') +
       '<div class="rows">' +
-      '<div class="row"><div class="k">Entry</div><div class="v">' + fmt(s.entry, dec) + '</div></div>' +
+      // Aturan 27 Nov 2026: harga Entry hanya ditampilkan kalau status sudah terkonfirmasi/berjalan (BERJALAN, HIT TP, HIT SL); sinyal MENUNGGU dan TIDAK VALID tidak menampilkan Entry.
+      ((s.status === 'BERJALAN' || s.status === 'HIT TP' || s.status === 'HIT SL') ? '<div class="row"><div class="k">Entry</div><div class="v">' + fmt(s.entry, dec) + '</div></div>' : '') +
       '<div class="row"><div class="k">Stop Loss</div><div class="v sl">' + slLabel + '</div></div>' +
       '<div class="row"><div class="k">Take Profit</div><div class="v tp">' + fmtRange(s.tp_zone, dec) + '</div></div>' +
       '<div class="row"><div class="k">Risk</div><div class="v">' + fmt(s.risk_pct, 2) + '%</div></div>' +
