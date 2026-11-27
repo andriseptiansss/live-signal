@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-28 00:30 WIB",
+  "generated_at_wib": "2026-11-28 00:40 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -12,8 +12,8 @@
     "hit_tp": 3,
     "hit_sl": 2,
     "invalid": 7,
-    "running": 3,
-    "waiting": 1,
+    "running": 4,
+    "waiting": 0,
     "winrate": 60.0
   },
   "pdh_pdl": {
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 59596.6,
-      "change_24h_pct": -1.34,
+      "last": 59555.4,
+      "change_24h_pct": -1.44,
       "high_24h": 62199.2,
       "low_24h": 58729.6
     },
     "ETHUSDT.P": {
-      "last": 1663.48,
-      "change_24h_pct": -1.58,
+      "last": 1659.27,
+      "change_24h_pct": -1.9,
       "high_24h": 1754.99,
       "low_24h": 1632.08
     },
     "BNBUSDT.P": {
-      "last": 550.23,
-      "change_24h_pct": -0.15,
+      "last": 549.04,
+      "change_24h_pct": -0.42,
       "high_24h": 568.08,
       "low_24h": 542.51
     },
     "SOLUSDT.P": {
-      "last": 71.69,
-      "change_24h_pct": 1.24,
+      "last": 71.44,
+      "change_24h_pct": 0.8,
       "high_24h": 73.89,
       "low_24h": 70.06
     }
@@ -73,14 +73,14 @@
         548.67,
         552.61
       ],
-      "sl": 548.67,
+      "sl": 547.71,
       "tp_zone": [
         562.48,
         563.62
       ],
-      "risk_pct": 0.67,
+      "risk_pct": 0.84,
       "reward_pct": 1.83,
-      "ratio": "1:2,7",
+      "ratio": "1:2,2",
       "status": "BERJALAN",
       "note": "",
       "created": "27 Nov 2026, 23:12 WIB"
@@ -92,20 +92,20 @@
       "decimals": 2,
       "name": "SOL Long",
       "direction": "LONG",
-      "entry": 71.03,
+      "entry": 71.65,
       "entry_zone": [
         71.03,
         71.68
       ],
-      "sl": 71.03,
+      "sl": 70.93,
       "tp_zone": [
         73.26,
         73.5
       ],
-      "risk_pct": 0.46,
-      "reward_pct": 2.67,
-      "ratio": "1:5,9",
-      "status": "MENUNGGU",
+      "risk_pct": 1.0,
+      "reward_pct": 2.25,
+      "ratio": "1:2,2",
+      "status": "BERJALAN",
       "note": "",
       "created": "27 Nov 2026, 23:12 WIB"
     },
@@ -121,14 +121,14 @@
         1654.01,
         1667.99
       ],
-      "sl": 1654.01,
+      "sl": 1652.11,
       "tp_zone": [
         1721.11,
         1725.8
       ],
-      "risk_pct": 0.81,
+      "risk_pct": 0.92,
       "reward_pct": 3.22,
-      "ratio": "1:4,0",
+      "ratio": "1:3,5",
       "status": "BERJALAN",
       "note": "",
       "created": "27 Nov 2026, 23:12 WIB"
@@ -145,14 +145,14 @@
         59374.4,
         59880.0
       ],
-      "sl": 59374.4,
+      "sl": 59307.2,
       "tp_zone": [
         61360.0,
         61494.9
       ],
-      "risk_pct": 0.78,
+      "risk_pct": 0.89,
       "reward_pct": 2.54,
-      "ratio": "1:3,3",
+      "ratio": "1:2,9",
       "status": "BERJALAN",
       "note": "",
       "created": "27 Nov 2026, 23:12 WIB"
