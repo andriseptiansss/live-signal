@@ -153,19 +153,26 @@ def parse_tracker(text):
     if not signals:
         raise ValueError("tidak ada sinyal ter-parse dari tracker")
 
-    stats = {}
-    for key, pat in [
-        ("total", r"Total sinyal diberikan:\s*(\d+)"),
-        ("hit_tp", r"HIT TP:\s*(\d+)"),
-        ("hit_sl", r"HIT SL:\s*(\d+)"),
-        ("invalid", r"Tidak valid \(kadaluarsa\):\s*(\d+)"),
-        ("running", r"Masih BERJALAN:\s*(\d+)"),
-        ("waiting", r"Masih MENUNGGU:\s*(\d+)"),
-    ]:
-        m = re.search(pat, text)
-        stats[key] = int(m.group(1)) if m else 0
-    m = re.search(r"Winrate \(dari sinyal selesai\):\s*([\d,]+)%", text)
-    stats["winrate"] = float(m.group(1).replace(",", ".")) if m else 0.0
+    # Statistik dihitung dari sinyal yang ter-parse (bukan dari baris ringkasan
+    # tracker) supaya angka panel selalu cocok dengan daftar sinyal.
+    # (Perbaikan 27 Nov 2026: regex lama "Tidak valid (kadaluarsa): N" tidak
+    # cocok lagi dengan format blok statistik tracker yang baru
+    # "- Tidak valid: 5 (2 kadaluarsa + 1 TP duluan + 2 zona rusak)",
+    # sehingga invalid terbaca 0 padahal ada 5 sinyal TIDAK VALID.)
+    by_status = {}
+    for s in signals:
+        by_status[s["status"]] = by_status.get(s["status"], 0) + 1
+    hit_tp = by_status.get("HIT TP", 0)
+    hit_sl = by_status.get("HIT SL", 0)
+    stats = {
+        "total": len(signals),
+        "hit_tp": hit_tp,
+        "hit_sl": hit_sl,
+        "invalid": by_status.get("TIDAK VALID", 0),
+        "running": by_status.get("BERJALAN", 0),
+        "waiting": by_status.get("MENUNGGU", 0),
+        "winrate": round(hit_tp / (hit_tp + hit_sl) * 100, 1) if (hit_tp + hit_sl) else 0.0,
+    }
 
     # PDH/PDL terbaru: ambil kemunculan TERAKHIR pola "BTC PDH ... / PDL ..."
     pdh_pdl = {}
