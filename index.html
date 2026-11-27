@@ -474,8 +474,8 @@ function renderSignals() {
       (s._live ? '<span class="meta" title="Status terdeteksi otomatis dari candle live; tracker resmi menyusul">• live</span>' : '') + '</div>' +
       (s.created ? '<div class="created">Dibuat ' + escapeHtml(s.created) + '</div>' : '') +
       '<div class="rows">' +
-      // Aturan 27 Nov 2026: harga Entry disembunyikan hanya untuk sinyal MENUNGGU; sinyal TIDAK VALID tetap ditampilkan (sebagai riwayat), sama seperti BERJALAN/HIT TP/HIT SL.
-      (s.status !== 'MENUNGGU' ? '<div class="row"><div class="k">Entry</div><div class="v">' + fmt(s.entry, dec) + '</div></div>' : '') +
+      // Aturan 27 Nov 2026 ~22:47 WIB (dibalik): harga Entry ditampilkan untuk semua status termasuk MENUNGGU — OB kini dari m15 (lebih tebal/tepercaya) dan retest tetap m5.
+      '<div class="row"><div class="k">Entry</div><div class="v">' + fmt(s.entry, dec) + '</div></div>' +
       '<div class="row"><div class="k">Stop Loss</div><div class="v sl">' + slLabel + '</div></div>' +
       '<div class="row"><div class="k">Take Profit</div><div class="v tp">' + fmtRange(s.tp_zone, dec) + '</div></div>' +
       '<div class="row"><div class="k">Risk</div><div class="v">' + fmt(s.risk_pct, 2) + '%</div></div>' +
