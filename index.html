@@ -36,6 +36,11 @@
   .stat .k { font-size: 12px; color: #8b949e; }
   .stat .v { font-size: 20px; font-weight: 800; margin-top: 2px; }
   .stat .v.green { color: #3fb950; } .stat .v.red { color: #f85149; } .stat .v.blue { color: #58a6ff; }
+  .stat.clickable { cursor: pointer; }
+  .stat.clickable:hover { border-color: #58a6ff; }
+  .stat.clickable.active { border-color: #1f6feb; background: #1f6feb33; }
+  .filter-bar { display: flex; align-items: center; gap: 10px; background: #161b22; border: 1px solid #1f6feb; border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; font-size: 13px; }
+  .filter-bar button { background: #1f6feb; color: #fff; border: none; border-radius: 6px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
   .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
   .card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
   .card-head .name { font-size: 16px; font-weight: 800; }
@@ -147,6 +152,8 @@ let pair = 'BTCUSDT.P';     // pair aktif
 let candles = [];           // [[ts, o, h, l, c], ...] kronologis
 let ticker = null;          // {last, change, high, low}
 let priceSource = '—';
+let statFilter = 'ALL'; // filter daftar sinyal dari kartu statistik (klik kartu)
+const FILTER_LABELS = { 'HIT TP': 'HIT TP', 'HIT SL': 'HIT SL', 'TIDAK VALID': 'Tidak valid', 'BERJALAN': 'Berjalan', 'MENUNGGU': 'Menunggu' };
 
 const $ = id => document.getElementById(id);
 function fmt(n, dec) {
@@ -404,16 +411,27 @@ function renderStats() {
   };
   s.winrate = (s.hit_tp + s.hit_sl) ? Math.round(s.hit_tp / (s.hit_tp + s.hit_sl) * 1000) / 10 : 0;
   const items = [
-    ['Total sinyal', s.total ?? '—', ''],
-    ['HIT TP', s.hit_tp ?? '—', 'green'],
-    ['HIT SL', s.hit_sl ?? '—', 'red'],
-    ['Tidak valid', s.invalid ?? '—', ''],
-    ['Berjalan', s.running ?? '—', 'blue'],
-    ['Menunggu', s.waiting ?? '—', ''],
-    ['Winrate', (s.winrate ?? '—') + '%', 'green'],
+    ['Total sinyal', s.total ?? '—', '', 'ALL'],
+    ['HIT TP', s.hit_tp ?? '—', 'green', 'HIT TP'],
+    ['HIT SL', s.hit_sl ?? '—', 'red', 'HIT SL'],
+    ['Tidak valid', s.invalid ?? '—', '', 'TIDAK VALID'],
+    ['Berjalan', s.running ?? '—', 'blue', 'BERJALAN'],
+    ['Menunggu', s.waiting ?? '—', '', 'MENUNGGU'],
+    ['Winrate', (s.winrate ?? '—') + '%', 'green', null],
   ];
-  $('stats').innerHTML = items.map(([k, v, c]) =>
-    '<div class="stat"><div class="k">' + k + '</div><div class="v ' + c + '">' + v + '</div></div>').join('');
+  $('stats').innerHTML = items.map(([k, v, c, f]) => {
+    const clickable = f ? ' clickable' : '';
+    const active = (f && statFilter === f) ? ' active' : '';
+    const attr = f ? ' data-filter="' + f + '"' : '';
+    const title = f ? (' title="' + (f === 'ALL' ? 'Klik untuk menampilkan semua sinyal' : 'Klik untuk menampilkan hanya sinyal ' + FILTER_LABELS[f]) + '"') : '';
+    return '<div class="stat' + clickable + active + '"' + attr + title + '><div class="k">' + k + '</div><div class="v ' + c + '">' + v + '</div></div>';
+  }).join('');
+  document.querySelectorAll('#stats .stat.clickable').forEach(el => el.addEventListener('click', () => {
+    const f = el.dataset.filter;
+    statFilter = (statFilter === f) ? 'ALL' : f;
+    renderStats();
+    renderSignals();
+  }));
 }
 
 // Leverage simulasi ROI — sama seperti ruang Live Signal (10–150x, default 100x).
@@ -461,9 +479,17 @@ function setLev(v) {
 })();
 
 function renderSignals() {
-  const list = (data.signals || []).map(getLiveSignal);
-  if (!list.length) { $('signals').innerHTML = '<p class="meta">Belum ada sinyal.</p>'; return; }
-  $('signals').innerHTML = list.map(s => {
+  let list = (data.signals || []).map(getLiveSignal);
+  const filtered = statFilter !== 'ALL';
+  if (filtered) list = list.filter(s => s.status === statFilter);
+  let html = '';
+  if (filtered) {
+    html += '<div class="filter-bar">Menampilkan sinyal <b>' + (FILTER_LABELS[statFilter] || statFilter) + '</b> <button id="clearFilter" type="button">✕ Tampilkan semua</button></div>';
+  }
+  if (!list.length) {
+    html += '<p class="meta">' + (filtered ? 'Tidak ada sinyal ' + (FILTER_LABELS[statFilter] || statFilter) + '.' : 'Belum ada sinyal.') + '</p>';
+  } else {
+    html += list.map(s => {
     const dec = s.decimals ?? 2;
     const slLabel = s.direction === 'SHORT' ? 'di atas ' + fmt(s.sl, dec) : 'di bawah ' + fmt(s.sl, dec);
     const r = roiPct(s);
@@ -485,7 +511,11 @@ function renderSignals() {
       '</div>' +
       (s.note ? '<p class="note"><b>Penyebab / catatan:</b> ' + escapeHtml(s.note) + '</p>' : '') +
       '</div>';
-  }).join('');
+    }).join('');
+  }
+  $('signals').innerHTML = html;
+  const cf = document.getElementById('clearFilter');
+  if (cf) cf.addEventListener('click', () => { statFilter = 'ALL'; renderStats(); renderSignals(); });
 }
 function escapeHtml(t) {
   return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
