@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-27 11:40 WIB",
+  "generated_at_wib": "2026-11-27 11:50 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -12,8 +12,8 @@
     "hit_tp": 3,
     "hit_sl": 1,
     "invalid": 3,
-    "running": 0,
-    "waiting": 4,
+    "running": 1,
+    "waiting": 3,
     "winrate": 75.0
   },
   "pdh_pdl": {
@@ -36,26 +36,26 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 61587.8,
+      "last": 61472.4,
       "change_24h_pct": 0.86,
       "high_24h": 61879.7,
       "low_24h": 59886.8
     },
     "ETHUSDT.P": {
-      "last": 1738.26,
-      "change_24h_pct": 1.87,
+      "last": 1733.59,
+      "change_24h_pct": 1.81,
       "high_24h": 1741.31,
       "low_24h": 1666.71
     },
     "BNBUSDT.P": {
-      "last": 564.86,
-      "change_24h_pct": 0.77,
+      "last": 563.79,
+      "change_24h_pct": 0.68,
       "high_24h": 565.17,
       "low_24h": 544.26
     },
     "SOLUSDT.P": {
-      "last": 72.93,
-      "change_24h_pct": 2.37,
+      "last": 72.82,
+      "change_24h_pct": 2.39,
       "high_24h": 73.18,
       "low_24h": 69.74
     }
@@ -68,7 +68,7 @@
       "decimals": 2,
       "name": "SOL Short",
       "direction": "SHORT",
-      "entry": 72.96,
+      "entry": 73.0,
       "entry_zone": [
         72.96,
         73.19
@@ -78,10 +78,10 @@
         71.53,
         71.55
       ],
-      "risk_pct": 0.16,
-      "reward_pct": 2.09,
-      "ratio": "1:13,3",
-      "status": "MENUNGGU",
+      "risk_pct": 0.26,
+      "reward_pct": 1.99,
+      "ratio": "1:7,6",
+      "status": "BERJALAN",
       "note": "",
       "created": "27 Nov 2026, 11:29 WIB"
     },
