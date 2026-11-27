@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Signal — BTC / ETH / BNB / SOL</title>
+<title>Live Signal — BTC / ETH / BNB / SOL / XAU</title>
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -81,7 +81,7 @@
     <span class="live"><span class="dot"></span>LIVE</span>
     <span class="meta" id="updated">Memuat data…</span>
   </header>
-  <p class="sub">BTCUSDT.P · ETHUSDT.P · BNBUSDT.P · SOLUSDT.P — Metode: Asia range + London order block, entry 5m. Sinyal diterbitkan Andri &amp; Amel.</p>
+  <p class="sub">BTCUSDT.P · ETHUSDT.P · BNBUSDT.P · SOLUSDT.P · XAUUSDT.P — Metode: Asia range + London order block, entry 5m. Sinyal diterbitkan Andri &amp; Amel.</p>
 
   <div class="tabs" id="tabs"></div>
 
@@ -146,6 +146,7 @@ const PAIRS = {
   'ETHUSDT.P': { okx: 'ETH-USDT-SWAP', binance: 'ETHUSDT', decimals: 2 },
   'BNBUSDT.P': { okx: 'BNB-USDT-SWAP', binance: 'BNBUSDT', decimals: 2 },
   'SOLUSDT.P': { okx: 'SOL-USDT-SWAP', binance: 'SOLUSDT', decimals: 2 },
+  'XAUUSDT.P': { okx: 'XAU-USDT-SWAP', binance: 'XAUUSDT', decimals: 1 },
 };
 let data = null;            // isi signals.json
 let pair = 'BTCUSDT.P';     // pair aktif
