@@ -131,8 +131,7 @@
   <div id="signals"></div>
 
   <footer>
-    Sinyal dari analisa teknikal (bukan ajakan jual/beli). Status sinyal mengikuti tracker resmi; harga live dari API publik OKX (cadangan: Binance).
-    Data sinyal diperbarui otomatis beberapa menit setelah ada sinyal baru atau perubahan status. Semua waktu WIB.
+    Sinyal dari analisa teknikal (bukan ajakan jual/beli). Status sinyal dihitung otomatis dari candle live 5m/15m (aturan Asia/London/5m); status yang berubah ditandai "• live" dan tracker resmi menyusul beberapa menit kemudian. Harga live dari API publik OKX (cadangan: Binance). Semua waktu WIB.
   </footer>
 </div>
 
@@ -172,13 +171,238 @@ async function loadSignals() {
     renderSignals();
     renderPairMeta();
     drawChart();
+    refreshEvalCandles();
   } catch (e) {
     $('updated').innerHTML = '<span class="err">Data sinyal gagal dimuat: ' + e.message + '</span>';
   }
 }
 
+/* ---------- evaluasi otomatis semua aturan (client-side, dari candle live) ---------- */
+// Aturan 27 Nov 2026: semua aturan sinyal berjalan otomatis di website (dan di room).
+// Website menghitung status live dari candle 5m/15m dan menampilkannya; tracker resmi
+// tetap sumber kebenaran dan akan menyusul dalam hitungan menit. Evaluasi ini hanya
+// TAMPILAN — tidak mengubah data sinyal di tracker.
+const MONTHS_ID = { Jan:0, Feb:1, Mar:2, Apr:3, Mei:4, May:4, Jun:5, Jul:6, Agu:7, Aug:7, Sep:8, Okt:9, Oct:9, Nov:10, Des:11, Dec:11 };
+function parseCreated(str) {
+  if (!str) return null;
+  const m = String(str).match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4}),\s+(\d{2}):(\d{2})/);
+  if (!m) return null;
+  const mo = MONTHS_ID[m[2]];
+  if (mo === undefined) return null;
+  return Date.UTC(+m[3], mo, +m[1], +m[4] - 7, +m[5]); // WIB = UTC+7
+}
+function fmtID(n, dec) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return Number(n).toLocaleString('id-ID', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+}
+function fmtTimeWIB(ts) {
+  const d = new Date(ts + 7 * 3600 * 1000);
+  const hh = String(d.getUTCHours()).padStart(2, '0'), mm = String(d.getUTCMinutes()).padStart(2, '0');
+  return hh + ':' + mm;
+}
+
+let evalCandles = {}; // pair -> { c5: [[ts,o,h,l,c]...], c15: [...] } (candle TUTUP saja, kronologis)
+
+async function fetchEvalCandlesFor(pairKey) {
+  const p = PAIRS[pairKey];
+  async function getKlines(interval, limit) {
+    try {
+      const r = await fetch('https://fapi.binance.com/fapi/v1/klines?symbol=' + p.binance + '&interval=' + interval + '&limit=' + limit);
+      const j = await r.json();
+      if (Array.isArray(j) && j.length) return j.map(c => [+c[0], +c[1], +c[2], +c[3], +c[4]]);
+    } catch (e) {}
+    try {
+      const bar = interval === '5m' ? '5m' : '15m';
+      const r = await fetch('https://www.okx.com/api/v5/market/candles?instId=' + p.okx + '&bar=' + bar + '&limit=100');
+      const j = await r.json();
+      if (j && Array.isArray(j.data) && j.data.length) return j.data.map(c => [+c[0], +c[1], +c[2], +c[3], +c[4]]).reverse();
+    } catch (e) {}
+    return [];
+  }
+  const now = Date.now();
+  const iv5 = 5 * 60 * 1000, iv15 = 15 * 60 * 1000;
+  const c5raw = await getKlines('5m', 500);
+  const c15raw = await getKlines('15m', 500);
+  const closed = (arr, iv) => arr.filter(c => c[0] + iv <= now).sort((a, b) => a[0] - b[0]);
+  evalCandles[pairKey] = { c5: closed(c5raw, iv5), c15: closed(c15raw, iv15) };
+}
+
+async function refreshEvalCandles() {
+  if (!data) return;
+  const livePairs = new Set((data.signals || []).filter(s => s.status === 'MENUNGGU' || s.status === 'BERJALAN').map(s => s.pair));
+  for (const pk of livePairs) {
+    try { await fetchEvalCandlesFor(pk); } catch (e) {}
+  }
+  if (data) { renderSignals(); renderStats(); drawChart(); }
+}
+
+function evalSignalLive(s) {
+  if (s.status !== 'MENUNGGU' && s.status !== 'BERJALAN') return s;
+  const ec = evalCandles[s.pair];
+  if (!ec || !ec.c5.length) return s;
+  const createdTs = parseCreated(s.created);
+  if (!createdTs) return s;
+  const dec = s.decimals ?? 2;
+  const zlo = s.entry_zone[0], zhi = s.entry_zone[1];
+  const tpLo = s.tp_zone[0], tpHi = s.tp_zone[1];
+  const sl = s.sl;
+  const isShort = s.direction === 'SHORT';
+  const c5 = ec.c5.filter(c => c[0] >= createdTs);
+  const c15 = ec.c15.filter(c => c[0] >= createdTs);
+  if (!c5.length) return s;
+  const closeT5 = c => c[0] + 5 * 60 * 1000;
+  const closeT15 = c => c[0] + 15 * 60 * 1000;
+  const zoneStr = fmtID(zlo, dec) + '–' + fmtID(zhi, dec);
+  const tpStr = fmtID(tpLo, dec) + '–' + fmtID(tpHi, dec);
+  // Kadaluarsa: 07:00 WIB sehari setelah dibuat (07:00 WIB = 00:00 UTC).
+  const wib = new Date(createdTs + 7 * 3600 * 1000);
+  const expiryTs = Date.UTC(wib.getUTCFullYear(), wib.getUTCMonth(), wib.getUTCDate() + 1, 0, 0);
+
+  // Retest terkonfirmasi pertama (MENUNGGU -> BERJALAN): candle buka di luar zona,
+  // menyentuh zona, close kembali di luar zona (rejection), + 2 candle 5m berikutnya
+  // close tetap di luar zona (follow-through).
+  function findRetest() {
+    for (let i = 0; i < c5.length; i++) {
+      const c = c5[i];
+      const o = c[1], h = c[2], l = c[3], cl = c[4];
+      let ok = false, entryPx = null;
+      if (isShort) { ok = o < zlo && h >= zlo && cl < zlo; entryPx = h; }
+      else { ok = o > zhi && l <= zhi && cl > zhi; entryPx = l; }
+      if (!ok) continue;
+      if (i + 2 >= c5.length) return null; // follow-through belum lengkap
+      const n1 = c5[i + 1], n2 = c5[i + 2];
+      const ft = isShort ? (n1[4] < zlo && n2[4] < zlo) : (n1[4] > zhi && n2[4] > zhi);
+      if (!ft) continue;
+      return { time: closeT5(c), entry: entryPx, idx: i };
+    }
+    return null;
+  }
+
+  // Sentuhan TP pertama (MENUNGGU -> TIDAK VALID, TP duluan).
+  function findTpTouch() {
+    for (let i = 0; i < c5.length; i++) {
+      const c = c5[i];
+      const touched = isShort ? (c[3] <= tpHi) : (c[2] >= tpLo);
+      if (touched) return { time: closeT5(c), idx: i };
+    }
+    return null;
+  }
+
+  // Zona rusak terkonfirmasi pertama (MENUNGGU -> TIDAK VALID).
+  // Timeline gabungan close 5m & 15m. Break 5m aktif sampai ada close 5m yang
+  // kembali ke dalam zona (sweep). Terkonfirmasi saat close 15m di luar zona
+  // sementara break 5m masih aktif.
+  function findZoneBreak() {
+    const events = [];
+    c5.forEach(c => events.push({ t: closeT5(c), tf: 5, cl: c[4], open: c[0] }));
+    c15.forEach(c => events.push({ t: closeT15(c), tf: 15, cl: c[4], open: c[0] }));
+    events.sort((a, b) => (a.t - b.t) || (a.tf - b.tf));
+    let pending = null;
+    for (const e of events) {
+      const beyond = isShort ? (e.cl > zhi) : (e.cl < zlo);
+      if (e.tf === 5) {
+        if (beyond) { if (!pending) pending = e; }
+        else { pending = null; }
+      } else if (beyond && pending) {
+        return { time: e.t, c5: pending, c15: e };
+      }
+    }
+    return null;
+  }
+
+  // HIT TP / HIT SL pertama setelah waktu t0 (untuk BERJALAN).
+  function findTpSlAfter(t0) {
+    for (let i = 0; i < c5.length; i++) {
+      const c = c5[i];
+      if (closeT5(c) <= t0) continue;
+      const hitTp = isShort ? (c[3] <= tpHi) : (c[2] >= tpLo);
+      const hitSl = isShort ? (c[2] > sl) : (c[3] < sl);
+      if (hitTp) return { kind: 'HIT TP', time: closeT5(c), open: c[0] };
+      if (hitSl) return { kind: 'HIT SL', time: closeT5(c), open: c[0] };
+    }
+    return null;
+  }
+
+  function withLiveStatus(nStatus, nNote, nEntry) {
+    const out = Object.assign({}, s);
+    out.status = nStatus;
+    out._live = true;
+    if (nNote !== undefined) out.note = nNote;
+    if (nEntry !== undefined && nEntry !== null) {
+      out.entry = nEntry;
+      const risk = Math.abs(nEntry - sl) / nEntry * 100;
+      const tpMid = (tpLo + tpHi) / 2;
+      const reward = Math.abs(nEntry - tpMid) / nEntry * 100;
+      out.risk_pct = Math.round(risk * 100) / 100;
+      out.reward_pct = Math.round(reward * 100) / 100;
+      out.ratio = risk > 0 ? ('1:' + String(Math.round(reward / risk * 10) / 10).replace('.', ',')) : out.ratio;
+    }
+    return out;
+  }
+
+  if (s.status === 'MENUNGGU') {
+    const retest = findRetest();
+    const tpTouch = findTpTouch();
+    const zb = findZoneBreak();
+    const events = [];
+    if (retest) events.push({ t: retest.time, kind: 'RETEST', d: retest });
+    if (tpTouch) events.push({ t: tpTouch.time, kind: 'TP', d: tpTouch });
+    if (zb) events.push({ t: zb.time, kind: 'BREAK', d: zb });
+    events.sort((a, b) => a.t - b.t);
+    const first = events[0];
+    if (first && first.t < expiryTs) {
+      if (first.kind === 'RETEST') {
+        const hit = findTpSlAfter(first.d.time);
+        if (hit) {
+          if (hit.kind === 'HIT TP') return withLiveStatus('HIT TP', '', first.d.entry);
+          return withLiveStatus('HIT SL', 'HIT SL ' + fmtTimeWIB(hit.open) + ' WIB — harga live menyentuh SL ' + fmtID(sl, dec) + ' (terdeteksi otomatis).', first.d.entry);
+        }
+        return withLiveStatus('BERJALAN', '', first.d.entry);
+      }
+      if (first.kind === 'TP') {
+        return withLiveStatus('TIDAK VALID', 'Tidak valid: harga mencapai area TP ' + tpStr + ' sebelum zona entry teruji; pergerakan sudah terjadi tanpa entry.');
+      }
+      if (first.kind === 'BREAK') {
+        const b = first.d;
+        const dir = isShort ? 'ke atas' : 'ke bawah';
+        const edge = isShort ? fmtID(zhi, dec) : fmtID(zlo, dec);
+        const note = 'Tidak valid: zona ' + (isShort ? 'supply' : 'demand') + ' ' + zoneStr + ' ditembus ' + dir + ' — close 5m ' + fmtTimeWIB(b.c5.open) + ' WIB ' + fmtID(b.c5.cl, dec) + ' dan 15m ' + fmtTimeWIB(b.c15.open) + ' WIB ' + fmtID(b.c15.cl, dec) + ', keduanya di ' + (isShort ? 'atas' : 'bawah') + ' ' + (isShort ? 'atap' : 'dasar') + ' ' + edge + '; tidak ada rejection.';
+        return withLiveStatus('TIDAK VALID', note);
+      }
+    }
+    if (Date.now() > expiryTs) {
+      return withLiveStatus('TIDAK VALID', 'Tidak valid: tidak teruji sebelum 07:00 WIB; level Asia hari sebelumnya sudah tidak berlaku.');
+    }
+    return s;
+  }
+
+  // BERJALAN: cari waktu test entry dulu supaya TP/SL hanya dihitung setelah entry teruji.
+  const rt = findRetest();
+  const t0 = rt ? rt.time : createdTs;
+  const hit = findTpSlAfter(t0);
+  if (hit) {
+    if (hit.kind === 'HIT TP') return withLiveStatus('HIT TP', '');
+    return withLiveStatus('HIT SL', 'HIT SL ' + fmtTimeWIB(hit.open) + ' WIB — harga live menyentuh SL ' + fmtID(sl, dec) + ' (terdeteksi otomatis).');
+  }
+  return s;
+}
+
+function getLiveSignal(s) {
+  try { return evalSignalLive(s); } catch (e) { return s; }
+}
+
 function renderStats() {
-  const s = data.stats || {};
+  // Statistik dihitung dari status LIVE (evaluasi otomatis) supaya cocok dengan daftar sinyal.
+  const liveList = (data.signals || []).map(getLiveSignal);
+  const s = {
+    total: liveList.length,
+    hit_tp: liveList.filter(x => x.status === 'HIT TP').length,
+    hit_sl: liveList.filter(x => x.status === 'HIT SL').length,
+    invalid: liveList.filter(x => x.status === 'TIDAK VALID').length,
+    running: liveList.filter(x => x.status === 'BERJALAN').length,
+    waiting: liveList.filter(x => x.status === 'MENUNGGU').length,
+  };
+  s.winrate = (s.hit_tp + s.hit_sl) ? Math.round(s.hit_tp / (s.hit_tp + s.hit_sl) * 1000) / 10 : 0;
   const items = [
     ['Total sinyal', s.total ?? '—', ''],
     ['HIT TP', s.hit_tp ?? '—', 'green'],
@@ -237,7 +461,7 @@ function setLev(v) {
 })();
 
 function renderSignals() {
-  const list = (data.signals || []);
+  const list = (data.signals || []).map(getLiveSignal);
   if (!list.length) { $('signals').innerHTML = '<p class="meta">Belum ada sinyal.</p>'; return; }
   $('signals').innerHTML = list.map(s => {
     const dec = s.decimals ?? 2;
@@ -246,7 +470,8 @@ function renderSignals() {
     return '<div class="card">' +
       '<div class="card-head"><span class="name">' + s.name + '</span>' +
       '<span class="badge ' + s.direction + '">' + s.direction + '</span>' +
-      '<span class="badge ' + statusClass(s.status) + '">' + s.status + '</span></div>' +
+      '<span class="badge ' + statusClass(s.status) + '">' + s.status + '</span>' +
+      (s._live ? '<span class="meta" title="Status terdeteksi otomatis dari candle live; tracker resmi menyusul">• live</span>' : '') + '</div>' +
       (s.created ? '<div class="created">Dibuat ' + escapeHtml(s.created) + '</div>' : '') +
       '<div class="rows">' +
       // Aturan 27 Nov 2026: harga Entry disembunyikan hanya untuk sinyal MENUNGGU; sinyal TIDAK VALID tetap ditampilkan (sebagai riwayat), sama seperti BERJALAN/HIT TP/HIT SL.
@@ -337,8 +562,9 @@ function renderPairMeta() {
 /* ---------- gambar chart ---------- */
 function activeSignalZones() {
   // Aturan chart bersih: zona hanya untuk sinyal MENUNGGU (masih valid) / BERJALAN pair ini.
+  // Status memakai evaluasi live — zona yang rusak otomatis hilang dari chart.
   if (!data) return [];
-  return (data.signals || []).filter(s => s.pair === pair && (s.status === 'MENUNGGU' || s.status === 'BERJALAN'));
+  return (data.signals || []).map(getLiveSignal).filter(s => s.pair === pair && (s.status === 'MENUNGGU' || s.status === 'BERJALAN'));
 }
 
 function drawChart() {
@@ -452,6 +678,7 @@ fetchCandles();
 setInterval(fetchTicker, 5000);      // harga tiap 5 detik
 setInterval(loadSignals, 30000);     // data sinyal tiap 30 detik
 setInterval(fetchCandles, 60000);    // candle tiap 60 detik
+setInterval(refreshEvalCandles, 60000); // evaluasi otomatis tiap 60 detik
 window.addEventListener('resize', drawChart);
 </script>
 </body>
