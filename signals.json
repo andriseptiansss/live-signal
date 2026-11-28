@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-29 03:40 WIB",
+  "generated_at_wib": "2026-11-29 03:49 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -13,8 +13,8 @@
     "hit_tp": 3,
     "hit_sl": 2,
     "invalid": 7,
-    "running": 4,
-    "waiting": 1,
+    "running": 5,
+    "waiting": 0,
     "winrate": 60.0
   },
   "pdh_pdl": {
@@ -41,32 +41,32 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 59230.7,
-      "change_24h_pct": -0.81,
+      "last": 59269.4,
+      "change_24h_pct": -0.8,
       "high_24h": 60244.9,
       "low_24h": 58903.8
     },
     "ETHUSDT.P": {
-      "last": 1643.61,
-      "change_24h_pct": -1.32,
+      "last": 1643.82,
+      "change_24h_pct": -1.36,
       "high_24h": 1672.23,
       "low_24h": 1633.21
     },
     "BNBUSDT.P": {
-      "last": 549.62,
-      "change_24h_pct": -0.57,
+      "last": 549.89,
+      "change_24h_pct": -0.59,
       "high_24h": 557.0,
       "low_24h": 547.6
     },
     "SOLUSDT.P": {
-      "last": 70.39,
-      "change_24h_pct": -2.33,
+      "last": 70.42,
+      "change_24h_pct": -2.15,
       "high_24h": 72.25,
       "low_24h": 70.02
     },
     "XAUUSDT.P": {
-      "last": 3660.3,
-      "change_24h_pct": 0.05,
+      "last": 3659.1,
+      "change_24h_pct": -0.04,
       "high_24h": 3675.0,
       "low_24h": 3657.0
     }
@@ -79,7 +79,7 @@
       "decimals": 1,
       "name": "XAU Long",
       "direction": "LONG",
-      "entry": 3658.73,
+      "entry": 3659.0,
       "entry_zone": [
         3658.73,
         3660.25
@@ -89,10 +89,10 @@
         3664.68,
         3665.86
       ],
-      "risk_pct": 0.13,
-      "reward_pct": 0.14,
-      "ratio": "1:1,1",
-      "status": "MENUNGGU",
+      "risk_pct": 0.11,
+      "reward_pct": 0.16,
+      "ratio": "1:1,37",
+      "status": "BERJALAN",
       "note": "",
       "created": "29 Nov 2026, 02:32 WIB"
     },
