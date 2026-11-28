@@ -131,7 +131,7 @@
       <span class="lev-x" id="levX">100×</span>
     </div>
     <div class="lev-presets" id="levPresets"></div>
-    <div class="lev-note">ROI sinyal yang sedang berjalan mengikuti leverage ini. Hanya tampilan di perangkatmu — tidak mengubah data sinyal.</div>
+    <div class="lev-note">ROI sinyal yang sedang berjalan mengikuti leverage ini — kecuali XAU yang menampilkan pips (1 pip = 0,01). Hanya tampilan di perangkatmu — tidak mengubah data sinyal.</div>
   </div>
   <div id="signals"></div>
 
@@ -452,6 +452,18 @@ function roiPct(s) {
   return move * 100 * lev;
 }
 
+// Pips XAU — keputusan Bang Andri 29 Nov 2026 ~03:47 WIB: 1 pip = 0,01 (standar forex, $1 = 100 pips).
+// Hanya untuk sinyal XAU yang BERJALAN; pair lain tetap ROI %. Pips tidak pakai leverage.
+const XAU_PIP = 0.01;
+function pipsXau(s) {
+  if (s.status !== 'BERJALAN' || s.pair !== 'XAUUSDT.P') return null;
+  const last = (s.pair === pair && ticker) ? ticker.last
+    : (data.prices && data.prices[s.pair] ? data.prices[s.pair].last : null);
+  if (!last || !s.entry) return null;
+  const move = s.direction === 'SHORT' ? (s.entry - last) : (last - s.entry);
+  return move / XAU_PIP;
+}
+
 const LEV_PRESETS = [10, 20, 25, 50, 75, 100, 125, 150];
 function setLev(v) {
   lev = Math.min(150, Math.max(10, Math.round(v) || 100));
@@ -494,6 +506,7 @@ function renderSignals() {
     const dec = s.decimals ?? 2;
     const slLabel = s.direction === 'SHORT' ? 'di atas ' + fmt(s.sl, dec) : 'di bawah ' + fmt(s.sl, dec);
     const r = roiPct(s);
+    const p = pipsXau(s);
     return '<div class="card">' +
       '<div class="card-head"><span class="name">' + s.name + '</span>' +
       '<span class="badge ' + s.direction + '">' + s.direction + '</span>' +
@@ -508,7 +521,9 @@ function renderSignals() {
       '<div class="row"><div class="k">Risk</div><div class="v">' + fmt(s.risk_pct, 2) + '%</div></div>' +
       '<div class="row"><div class="k">Reward</div><div class="v">' + fmt(s.reward_pct, 2) + '%</div></div>' +
       '<div class="row"><div class="k">Rasio</div><div class="v">1 : ' + String(s.ratio || '').replace('1:', '') + '</div></div>' +
-      (r === null ? '' : '<div class="row"><div class="k">ROI (' + lev + 'x)</div><div class="v ' + (r >= 0 ? 'roi-up' : 'roi-down') + '">' + (r >= 0 ? '+' : '') + fmt(r, 2) + '%</div></div>') +
+      (p !== null
+        ? '<div class="row"><div class="k">Pips</div><div class="v ' + (p >= 0 ? 'roi-up' : 'roi-down') + '">' + (p >= 0 ? '+' : '') + fmt(p, 1) + ' pips</div></div>'
+        : (r === null ? '' : '<div class="row"><div class="k">ROI (' + lev + 'x)</div><div class="v ' + (r >= 0 ? 'roi-up' : 'roi-down') + '">' + (r >= 0 ? '+' : '') + fmt(r, 2) + '%</div></div>')) +
       '</div>' +
       (s.note ? '<p class="note"><b>Penyebab / catatan:</b> ' + escapeHtml(s.note) + '</p>' : '') +
       '</div>';
