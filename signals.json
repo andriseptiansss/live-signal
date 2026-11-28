@@ -1,5 +1,5 @@
 {
-  "generated_at_wib": "2026-11-28 19:30 WIB",
+  "generated_at_wib": "2026-11-28 19:40 WIB",
   "source": "tracker backtest-signal-stats.md (sumber kebenaran status sinyal)",
   "pairs": [
     "BTCUSDT.P",
@@ -41,33 +41,33 @@
   },
   "prices": {
     "BTCUSDT.P": {
-      "last": 59280.5,
-      "change_24h_pct": -3.62,
+      "last": 59218.9,
+      "change_24h_pct": -3.8,
       "high_24h": 61621.7,
       "low_24h": 58729.6
     },
     "ETHUSDT.P": {
-      "last": 1650.25,
-      "change_24h_pct": -4.02,
+      "last": 1648.81,
+      "change_24h_pct": -4.27,
       "high_24h": 1728.32,
       "low_24h": 1632.08
     },
     "BNBUSDT.P": {
-      "last": 550.04,
-      "change_24h_pct": -2.38,
+      "last": 549.69,
+      "change_24h_pct": -2.47,
       "high_24h": 564.27,
       "low_24h": 542.51
     },
     "SOLUSDT.P": {
-      "last": 70.89,
-      "change_24h_pct": -2.85,
+      "last": 70.86,
+      "change_24h_pct": -2.96,
       "high_24h": 73.5,
       "low_24h": 70.06
     },
     "XAUUSDT.P": {
-      "last": 3664.1,
-      "change_24h_pct": -0.31,
-      "high_24h": 3678.0,
+      "last": 3665.8,
+      "change_24h_pct": -0.27,
+      "high_24h": 3677.6,
       "low_24h": 3622.0
     }
   },
